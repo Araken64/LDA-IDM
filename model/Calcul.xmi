@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LDP:Processus
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:LDP="http://www.univ-pau.fr/m2ti/2020/LDP"
+    xsi:schemaLocation="http://www.univ-pau.fr/m2ti/2020/LDP LDP.ecore">
+  <activites
+      description="factorielle"
+      suivante="//@activites.1">
+    <action
+        methodName="factorial"
+        returnTag="resFact">
+      <paramsTag>n</paramsTag>
+    </action>
+  </activites>
+  <activites
+      description="racine carree"
+      suivante="//@activites.2"
+      precedente="//@activites.0">
+    <action
+        methodName="sqrt"
+        returnTag="resSqrt">
+      <paramsTag>resFact</paramsTag>
+    </action>
+  </activites>
+  <activites
+      description="puissance"
+      suivante="//@activites.3"
+      precedente="//@activites.1">
+    <action
+        methodName="power"
+        returnTag="resPower">
+      <paramsTag>resSqrt</paramsTag>
+      <paramsTag>puiss</paramsTag>
+    </action>
+  </activites>
+  <activites
+      description="division"
+      precedente="//@activites.2">
+    <action
+        methodName="divide"
+        returnTag="resDiv">
+      <paramsTag>resPower</paramsTag>
+      <paramsTag>x</paramsTag>
+    </action>
+  </activites>
+  <debut reference="//@activites.0"/>
+  <fin reference="//@activites.3"/>
+</LDP:Processus>
