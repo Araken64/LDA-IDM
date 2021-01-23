@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated LDP -->
+      <package
+            uri="http://www.univ-pau.fr/m2ti/2020/LDP"
+            class="LDP.LDPPackage"
+            genModel="metamodels/LDP.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated LDP-parallel -->
+      <package
+            uri="http://www.univ-pau.fr/m2ti/2020/LDP-parallel"
+            class="LDPparallel.LDPparallelPackage"
+            genModel="metamodels/LDP-parallel.genmodel"/>
+   </extension>
+
+</plugin>

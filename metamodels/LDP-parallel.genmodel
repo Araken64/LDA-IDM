@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/LDA-IDM/src" modelPluginID="LDA-IDM" modelName="LDP-parallel"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>LDP-parallel.ecore</foreignModel>
+  <genPackages prefix="LDPparallel" disposableProviderFactory="true" ecorePackage="LDP-parallel.ecore#/">
+    <genClasses ecoreClass="LDP-parallel.ecore#//Processus">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Processus/sequences"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Processus/portes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Processus/debut"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Processus/fin"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Processus/sequencesActives"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="LDP-parallel.ecore#//ElementProcessus"/>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Sequence">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute LDP-parallel.ecore#//Sequence/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Sequence/activites"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Sequence/activiteCourante"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Sequence/premiereActivite"/>
+    </genClasses>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Activite">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute LDP-parallel.ecore#//Activite/description"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Activite/suivante"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Activite/precedente"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Activite/action"/>
+      <genOperations ecoreOperation="LDP-parallel.ecore#//Activite/pasDansSuivant">
+        <genParameters ecoreParameter="LDP-parallel.ecore#//Activite/pasDansSuivant/act"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="LDP-parallel.ecore#//PseudoEtat">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//PseudoEtat/reference"/>
+    </genClasses>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Debut"/>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Fin"/>
+    <genClasses image="false" ecoreClass="LDP-parallel.ecore#//Porte"/>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Fourche">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Fourche/pred"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Fourche/succ"/>
+    </genClasses>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Jonction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Jonction/pred"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference LDP-parallel.ecore#//Jonction/succ"/>
+    </genClasses>
+    <genClasses ecoreClass="LDP-parallel.ecore#//Operation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute LDP-parallel.ecore#//Operation/methodName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute LDP-parallel.ecore#//Operation/returnTag"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute LDP-parallel.ecore#//Operation/paramsTag"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

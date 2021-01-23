@@ -1,6 +1,20 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: LDA-IDM
-Bundle-SymbolicName: LDA-IDM; singleton:=true
+Bundle-Name: %pluginName
+Bundle-SymbolicName: LDA-IDM;singleton:=true
+Automatic-Module-Name: LDA-IDM
 Bundle-Version: 0.1.0.qualifier
-Require-Bundle: org.eclipse.emf.ecore
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: LDP,
+ LDP.impl,
+ LDP.util,
+ LDPparallel,
+ LDPparallel.impl,
+ LDPparallel.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.16.0"
+Bundle-ActivationPolicy: lazy
