@@ -1,5 +1,7 @@
 package LDP.util;
 
+import java.util.HashMap;
+
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -9,6 +11,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+
+import LDPparallel.util.Calcul;
 
 public class LDPManipulation {
 	public void sauverModele(String uri, EObject root) {
@@ -62,5 +66,15 @@ public class LDPManipulation {
 			}
 		}
 		return base;
+	}
+	
+	public static void main(String argv[]) {
+		HashMap<String, Integer> tags = new HashMap<>();
+		tags.put("n",6);
+		tags.put("puiss",3);
+		tags.put("x", 100);
+		Calcul target = new Calcul();
+		LDPExecutionEngine.execute("model/Calcul.xmi", target, tags);
+		System.out.println("Le résultat du calcul est : "+tags.get("resDiv"));
 	}
 }
