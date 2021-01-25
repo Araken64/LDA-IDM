@@ -9,7 +9,7 @@ public class LDPExecutionEngine {
 	public static void execute(String fileName, Object target, HashMap tags) throws LDPEngineException {
 		LDPManipulation ldp = new LDPManipulation();
 		LDP.Processus processus = ldp.getProcessus(fileName);
-		if (processus == null) throw new LDPEngineException("Processus was not found in model", new Exception());
+		if (processus == null) throw new LDPEngineException("Processus was not found in model");
 		LDP.Activite currentActivity = processus.getActiviteCourante() != null ? processus.getActiviteCourante() : processus.getDebut().getReference();		
 		// get current activity if defined else get first activity
 
