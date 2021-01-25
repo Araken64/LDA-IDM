@@ -3,19 +3,21 @@ package LDP.util;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LDPExecutionEngine {
 	public static void execute(String fileName, Object target, HashMap tags) throws LDPEngineException {
 		LDPManipulation ldp = new LDPManipulation();
 		LDP.Processus processus = ldp.getProcessus(fileName);
 		if (processus == null) throw new LDPEngineException("Processus was not found in model", new Exception());
-		LDP.Activite currentActivity = processus.getDebut().getReference(); // get first Activity
+		LDP.Activite currentActivity = processus.getActiviteCourante() != null ? processus.getActiviteCourante() : processus.getDebut().getReference();		
+		// get current activity if defined else get first activity
 
 		LDP.Operation operation;
 		List<String> paramsName;
 		Object[] params;
 		Object result;
-				
+						
 		while(currentActivity != null) { // while last activity have not been executed
 			processus.setActiviteCourante(currentActivity);
 			operation = currentActivity.getAction();
