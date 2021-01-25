@@ -4,7 +4,7 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:LDP="http://www.univ-pau.fr/m2ti/2020/LDP"
-    xsi:schemaLocation="http://www.univ-pau.fr/m2ti/2020/LDP LDP.ecore">
+    xsi:schemaLocation="http://www.univ-pau.fr/m2ti/2020/LDP ../metamodels/LDP.ecore">
   <activites
       description="factorielle"
       suivante="//@activites.1">
@@ -39,7 +39,7 @@
       description="division"
       precedente="//@activites.2">
     <action
-        methodName="divide"
+        methodName="division"
         returnTag="resDiv">
       <paramsTag>resPower</paramsTag>
       <paramsTag>x</paramsTag>
