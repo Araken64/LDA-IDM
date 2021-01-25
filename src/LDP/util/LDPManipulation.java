@@ -69,11 +69,15 @@ public class LDPManipulation {
 	}
 	
 	public static void main(String argv[]) {
+		LDPManipulation ldp = new LDPManipulation();
+		LDPPrinter.printModel(ldp.getProcessus("model/Calcul.xmi"));
+	
 		HashMap<String, Integer> tags = new HashMap<>();
 		tags.put("n",6);
 		tags.put("puiss",3);
 		tags.put("x", 100);
 		Calcul target = new Calcul();
+
 		LDPExecutionEngine.execute("model/Calcul.xmi", target, tags);
 		System.out.println("Le résultat du calcul est : "+tags.get("resDiv"));
 	}
