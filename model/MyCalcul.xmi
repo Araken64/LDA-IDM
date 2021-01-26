@@ -20,7 +20,7 @@
       suivante="//@activites.2"
       precedente="//@activites.0">
     <action
-        methodName="square"
+        methodName="sqrt"
         returnTag="resSqrt">
       <paramsTag>x3</paramsTag>
     </action>
