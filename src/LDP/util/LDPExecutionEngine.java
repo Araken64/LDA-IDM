@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import common.ModelHelper;
+
 public class LDPExecutionEngine {
 	public static void execute(String fileName, Object target, HashMap tags) throws LDPEngineException {
 		LDPManipulation ldp = new LDPManipulation();
@@ -24,24 +26,16 @@ public class LDPExecutionEngine {
 			paramsName = operation.getParamsTag();
 			params = paramsName.stream().map(name -> tags.get(name)).toArray();
 			try {
-				result = dynamicInvoke(operation.getMethodName(), target, params);
+				result = ModelHelper.dynamicInvoke(operation.getMethodName(), target, params);
 			} catch(Exception e) {
 				throw new LDPEngineException("Dynamic invoke failed : check method name or params", e);
 			}
 			tags.put(operation.getReturnTag(), result);
 			currentActivity = currentActivity.getSuivante();
 		}
+		processus.setActiviteCourante(null);
 	}
 	
-	public static Object dynamicInvoke(String methodName, Object target, Object params[]) throws Exception {
-	   Class cl = target.getClass();
-	   Class[] paramsClass = new Class[params.length];
-	   for (int i=0; i < params.length; i++)
-	      paramsClass[i] = params[i].getClass();
-	   Method met = cl.getMethod(methodName, paramsClass);
-	   Object result = met.invoke(target, params);
-	   return result;
-	}
 }
 
 final class LDPEngineException extends RuntimeException {
