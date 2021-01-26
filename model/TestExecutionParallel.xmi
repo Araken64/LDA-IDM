@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LDPparallel:Processus
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:LDPparallel="http://www.univ-pau.fr/m2ti/2020/LDP-parallel"
+    xsi:schemaLocation="http://www.univ-pau.fr/m2ti/2020/LDP-parallel ../metamodels/LDP-parallel.ecore">
+  <sequences
+      name="seqPlus"
+      premiereActivite="//@sequences.0/@activites.0">
+    <activites
+        description="plus">
+      <action
+          methodName="addition"
+          returnTag="res">
+        <paramsTag>resMult</paramsTag>
+        <paramsTag>resDiv</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <sequences
+      name="seqDivSqrt"
+      premiereActivite="//@sequences.1/@activites.1">
+    <activites
+        description="division"
+        precedente="//@sequences.1/@activites.1">
+      <action
+          methodName="division"
+          returnTag="resDiv">
+        <paramsTag>resSqrt</paramsTag>
+        <paramsTag>x4</paramsTag>
+      </action>
+    </activites>
+    <activites
+        description="racine carree"
+        suivante="//@sequences.1/@activites.0">
+      <action
+          methodName="sqrt"
+          returnTag="resSqrt">
+        <paramsTag>x3</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <sequences
+      name="seqMult"
+      premiereActivite="//@sequences.2/@activites.0">
+    <activites
+        description="multiplication">
+      <action
+          methodName="multiplication"
+          returnTag="resMult">
+        <paramsTag>x1</paramsTag>
+        <paramsTag>x2</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <portes xsi:type="LDPparallel:Jonction"
+      pred="//@sequences.1 //@sequences.2"
+      succ="//@sequences.0"/>
+  <portes xsi:type="LDPparallel:Fourche"
+      succ="//@sequences.1 //@sequences.2"/>
+  <debut reference="//@portes.1"/>
+  <fin reference="//@sequences.0"/>
+</LDPparallel:Processus>
