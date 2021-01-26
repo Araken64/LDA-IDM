@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ASCII"?>
+<LDPparallel:Processus xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:LDPparallel="http://www.univ-pau.fr/m2ti/2020/LDP-parallel">
+  <sequences>
+    <activites description="factorielle" suivante="//@sequences.0/@activites.1">
+      <action methodName="factorial" returnTag="resFact">
+        <paramsTag>n</paramsTag>
+      </action>
+    </activites>
+    <activites description="racine carree" suivante="//@sequences.0/@activites.2" precedente="//@sequences.0/@activites.0">
+      <action methodName="sqrt" returnTag="resSqrt">
+        <paramsTag>resFact</paramsTag>
+      </action>
+    </activites>
+    <activites description="puissance" suivante="//@sequences.0/@activites.3" precedente="//@sequences.0/@activites.1">
+      <action methodName="power" returnTag="resPower">
+        <paramsTag>resSqrt</paramsTag>
+        <paramsTag>puiss</paramsTag>
+      </action>
+    </activites>
+    <activites description="division" precedente="//@sequences.0/@activites.2">
+      <action methodName="divide" returnTag="resDiv">
+        <paramsTag>resPower</paramsTag>
+        <paramsTag>x</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+</LDPparallel:Processus>
