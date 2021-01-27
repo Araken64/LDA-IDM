@@ -21,75 +21,61 @@ import common.ModelHelper;
 
 
 public class LDPparallelExecutionEngine {
-	static HashMap<ElementProcessus, Thread> mappingThread;
-	static Processus processus;
-	// static HashMap<Jonction, Integer> verifPreJonction;
+	Processus processus;
+	HashMap<Jonction, Integer> verifPreJonction = new HashMap<>();
 
 	public void execute(String fileName, Object target, HashMap tags) throws LDPparallelEngineException {
 		processus = LDPparallelManipulation.getProcessus(fileName);
 		if (processus == null) throw new LDPparallelEngineException("Processus was not found in model");
-		mappingThread = new HashMap<>();
 		Debut debut = processus.getDebut(); // TODO case if already active sequences at inital state
 		runDebut(debut, target, tags);
 	}
 	
 	private void runFourche(Fourche fourche, Object target, HashMap tags) {
 		for(ElementProcessus element : fourche.getSucc()) {
-			Thread th = new Thread(() -> runElementProcessus(element, fourche, target, tags));
-			mappingThread.put(element, th);
-			th.start();
+			new Thread(() -> runElementProcessus(element, target, tags)).start();
 		}
 	}
 	
-	private void runJonction(Jonction jonction, ElementProcessus origin, Object target, HashMap tags) {
-		for(ElementProcessus element : jonction.getPred()) {
-			try {
-				mappingThread.get(element).join();
-			} catch (InterruptedException e) {
-				throw new LDPparallelEngineException("A thread has been interrupted", e);
-			}
-		}
-		if (jonction.getPred().get(0) == origin) { // only one predecessor (one thread) run the successor
-			Thread th = new Thread(() -> runElementProcessus(jonction.getSucc(), jonction, target, tags));
-			mappingThread.put(jonction.getSucc(), th);
-			th.start();
+	// synchronized to protect verifPreJonction access
+	private synchronized void runJonction(Jonction jonction, Object target, HashMap tags) {
+		verifPreJonction.putIfAbsent(jonction, jonction.getPred().size());
+		verifPreJonction.replace(jonction, verifPreJonction.get(jonction) - 1);
+		System.out.println(verifPreJonction.get(jonction));
+		if(verifPreJonction.get(jonction) == 0) {
+			new Thread(() -> runElementProcessus(jonction.getSucc(), target, tags)).start();
 		}
 	}
 	
-	private void runPorte(Porte porte, ElementProcessus origin, Object target, HashMap tags) {
+	private void runPorte(Porte porte, Object target, HashMap tags) {
 		if(porte instanceof Fourche) {
 			runFourche((Fourche) porte, target, tags);
 		} else {
-			runJonction((Jonction) porte, origin, target, tags);
+			runJonction((Jonction) porte, target, tags);
 		}
 	}
 	
-	private void runElementProcessus(ElementProcessus element, ElementProcessus origin, Object target, HashMap tags) {
+	private void runElementProcessus(ElementProcessus element, Object target, HashMap tags) {
 		if (element instanceof Porte) {
 			System.out.println("BeginElement : Porte");
-			runPorte((Porte) element, origin, target, tags);
+			runPorte((Porte) element, target, tags);
 			System.out.println("FinishElement : Porte");
 		} else if (element instanceof Sequence) {
 			System.out.println("BeginElement : Sequence -> " + ((Sequence) element).getName());
 			runSequence((Sequence) element, target, tags);
 			System.out.println("FinishElement : Sequence -> " + ((Sequence) element).getName());
+			
+			if(element == processus.getFin().getReference()) {
+				new Thread(() -> runFin(processus.getFin(), target, tags)).start();
+			}
+			Stream<Porte> portesSuivantes = processus.getPortes().stream().filter(porte -> isPredecessor(element, porte));
+			portesSuivantes.forEach(porte -> {
+				new Thread(() -> runPorte(porte, target, tags)).start();
+			});
 		} else {
 			System.out.println("BeginElement : PseudoEtat");
 			runPseudoEtat((PseudoEtat) element, target, tags);
 			System.out.println("FinishElement : PseudoEtat");
-		}
-		
-		Stream<Porte> portesSuivantes = processus.getPortes().stream().filter(porte -> isPredecessor(element, porte));
-		portesSuivantes.forEach(porte -> {
-			Thread th = new Thread(() -> runElementProcessus(porte, element, target, tags));
-			mappingThread.put(porte, th);
-			th.start();
-		});
-		
-		if(element == processus.getFin().getReference()) {
-			Thread th = new Thread(() -> runFin(processus.getFin(), target, tags));
-			mappingThread.put(processus.getFin(), th);
-			th.start();
 		}
 	}
 
@@ -103,9 +89,7 @@ public class LDPparallelExecutionEngine {
 	
 	private void runDebut(Debut debut, Object target, HashMap tags) {
 		System.out.println("BeginElement : Debut");
-		Thread th = new Thread(() -> runElementProcessus(debut.getReference(), debut, target, tags));
-		mappingThread.put(debut.getReference(), th);
-		th.start();
+		new Thread(() -> runElementProcessus(debut.getReference(), target, tags)).start();
 		System.out.println("FinishElement : Debut");
 	}
 	
