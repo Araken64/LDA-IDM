@@ -23,9 +23,9 @@ import common.ModelHelper;
 public class LDPparallelExecutionEngine {
 	static HashMap<ElementProcessus, Thread> mappingThread;
 	static Processus processus;
-	// static HashMap<Jonction, Integer> mappingPreJonction;
+	// static HashMap<Jonction, Integer> verifPreJonction;
 
-	public static void execute(String fileName, Object target, HashMap tags) throws LDPparallelEngineException {
+	public void execute(String fileName, Object target, HashMap tags) throws LDPparallelEngineException {
 		processus = LDPparallelManipulation.getProcessus(fileName);
 		if (processus == null) throw new LDPparallelEngineException("Processus was not found in model");
 		mappingThread = new HashMap<>();
@@ -33,7 +33,7 @@ public class LDPparallelExecutionEngine {
 		runDebut(debut, target, tags);
 	}
 	
-	private static void runFourche(Fourche fourche, Object target, HashMap tags) {
+	private void runFourche(Fourche fourche, Object target, HashMap tags) {
 		for(ElementProcessus element : fourche.getSucc()) {
 			Thread th = new Thread(() -> runElementProcessus(element, fourche, target, tags));
 			mappingThread.put(element, th);
@@ -41,7 +41,7 @@ public class LDPparallelExecutionEngine {
 		}
 	}
 	
-	private static void runJonction(Jonction jonction, ElementProcessus origin, Object target, HashMap tags) {
+	private void runJonction(Jonction jonction, ElementProcessus origin, Object target, HashMap tags) {
 		for(ElementProcessus element : jonction.getPred()) {
 			try {
 				mappingThread.get(element).join();
@@ -56,7 +56,7 @@ public class LDPparallelExecutionEngine {
 		}
 	}
 	
-	private static void runPorte(Porte porte, ElementProcessus origin, Object target, HashMap tags) {
+	private void runPorte(Porte porte, ElementProcessus origin, Object target, HashMap tags) {
 		if(porte instanceof Fourche) {
 			runFourche((Fourche) porte, target, tags);
 		} else {
@@ -64,7 +64,7 @@ public class LDPparallelExecutionEngine {
 		}
 	}
 	
-	private static void runElementProcessus(ElementProcessus element, ElementProcessus origin, Object target, HashMap tags) {
+	private void runElementProcessus(ElementProcessus element, ElementProcessus origin, Object target, HashMap tags) {
 		if (element instanceof Porte) {
 			System.out.println("BeginElement : Porte");
 			runPorte((Porte) element, origin, target, tags);
@@ -93,7 +93,7 @@ public class LDPparallelExecutionEngine {
 		}
 	}
 
-	private static void runPseudoEtat(PseudoEtat etat, Object target, HashMap tags) {
+	private void runPseudoEtat(PseudoEtat etat, Object target, HashMap tags) {
 		if(etat instanceof Debut) {
 			runDebut((Debut) etat, target, tags);
 		} else {
@@ -101,7 +101,7 @@ public class LDPparallelExecutionEngine {
 		}
 	}
 	
-	private static void runDebut(Debut debut, Object target, HashMap tags) {
+	private void runDebut(Debut debut, Object target, HashMap tags) {
 		System.out.println("BeginElement : Debut");
 		Thread th = new Thread(() -> runElementProcessus(debut.getReference(), debut, target, tags));
 		mappingThread.put(debut.getReference(), th);
@@ -109,12 +109,12 @@ public class LDPparallelExecutionEngine {
 		System.out.println("FinishElement : Debut");
 	}
 	
-	private static void runFin(Fin fin, Object target, HashMap tags) {
+	private void runFin(Fin fin, Object target, HashMap tags) {
 		System.out.println("Fin execution");
 		System.out.println(tags);
 	}
 	
-	private static void runSequence(Sequence sequence, Object target, HashMap tags) {		
+	private void runSequence(Sequence sequence, Object target, HashMap tags) {		
 		Operation operation;
 		List<String> paramsName;
 		Object[] params;
