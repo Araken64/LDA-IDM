@@ -1,14 +1,12 @@
 package LDP.util;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import common.ModelHelper;
 
 public class LDPExecutionEngine {
-	public static void execute(String fileName, Object target, HashMap tags) throws LDPEngineException {
+	public void execute(String fileName, Object target, HashMap tags) throws LDPEngineException {
 		LDPManipulation ldp = new LDPManipulation();
 		LDP.Processus processus = ldp.getProcessus(fileName);
 		if (processus == null) throw new LDPEngineException("Processus was not found in model");

@@ -77,8 +77,10 @@ public class LDPManipulation {
 		tags.put("puiss",3);
 		tags.put("x", 100);
 		Calcul target = new Calcul();
+		
+		LDPExecutionEngine engine = new LDPExecutionEngine();
 
-		LDPExecutionEngine.execute("model/Calcul.xmi", target, tags);
+		engine.execute("model/Calcul.xmi", target, tags);
 		System.out.println("Le résultat du calcul est : "+tags.get("resDiv"));
 	}
 }
