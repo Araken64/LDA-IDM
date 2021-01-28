@@ -70,17 +70,17 @@ public class LDPManipulation {
 	
 	public static void main(String argv[]) {
 		LDPManipulation ldp = new LDPManipulation();
-		LDPPrinter.printModel(ldp.getProcessus("model/Calcul.xmi"));
+		LDPPrinter.printModel(ldp.getProcessus("model/sequential/BigProcessus.xmi"));
 	
 		HashMap<String, Integer> tags = new HashMap<>();
-		tags.put("n",6);
-		tags.put("puiss",3);
-		tags.put("x", 100);
+		tags.put("A",1);tags.put("B",1);tags.put("D",1);tags.put("H",1);tags.put("J",1);tags.put("P",1);
+		tags.put("Q",1);tags.put("S",1);tags.put("L",1);tags.put("T",1);tags.put("V",1);
+		
 		Calcul target = new Calcul();
 		
 		LDPExecutionEngine engine = new LDPExecutionEngine();
 
-		engine.execute("model/Calcul.xmi", target, tags);
-		System.out.println("Le résultat du calcul est : "+tags.get("resDiv"));
+		engine.execute("model/sequential/BigProcessus.xmi", target, tags);
+		System.out.println("Le résultat du calcul est : "+tags);
 	}
 }
