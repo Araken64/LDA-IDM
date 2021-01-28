@@ -31,18 +31,14 @@ public class LDPparallelManipulation {
 	}
 	
 	public static void main(String argv[]) {
-		// LDPManipulation ldp = new LDPManipulation();
-		// LDPPrinter.printModel(ldp.getProcessus("model/CalculParallel.xmi"));
 	
 		HashMap<String, Integer> tags = new HashMap<>();
-		tags.put("x1", 1);
-		tags.put("x2", 1);
-		tags.put("x3", 9);
-		tags.put("x4", 1);
+		tags.put("A",1);tags.put("B",1);tags.put("D",1);tags.put("H",1);tags.put("J",1);
+		tags.put("P",1);tags.put("Q",1);tags.put("S",1);tags.put("L",1);tags.put("T",1);
 		Calcul target = new Calcul();
 		
 		LDPparallelExecutionEngine ldp = new LDPparallelExecutionEngine();
 
-		ldp.execute("model/TestExecutionParallel.xmi", target, tags);
+		ldp.execute("model/parallel/BigProcessusParallel_handmade.xmi", target, tags);
 	}
 }

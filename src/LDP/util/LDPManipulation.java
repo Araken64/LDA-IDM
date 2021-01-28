@@ -73,8 +73,8 @@ public class LDPManipulation {
 		LDPPrinter.printModel(ldp.getProcessus("model/sequential/BigProcessus.xmi"));
 	
 		HashMap<String, Integer> tags = new HashMap<>();
-		tags.put("A",1);tags.put("B",1);tags.put("D",1);tags.put("H",1);tags.put("J",1);tags.put("P",1);
-		tags.put("Q",1);tags.put("S",1);tags.put("L",1);tags.put("T",1);tags.put("V",1);
+		tags.put("A",1);tags.put("B",1);tags.put("D",1);tags.put("H",1);tags.put("J",1);
+		tags.put("P",1);tags.put("Q",1);tags.put("S",1);tags.put("L",1);tags.put("T",1);
 		
 		Calcul target = new Calcul();
 		

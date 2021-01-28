@@ -140,7 +140,7 @@
         methodName="multiplication"
         returnTag="X">
       <paramsTag>U</paramsTag>
-      <paramsTag>V</paramsTag>
+      <paramsTag>K</paramsTag>
     </action>
   </activites>
   <debut reference="//@activites.0"/>
