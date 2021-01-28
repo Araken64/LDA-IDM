@@ -30,7 +30,7 @@
     </activites>
   </sequences>
   <portes xsi:type="LDPparallel:Jonction" pred="//@sequences.1 //@sequences.2" succ="//@sequences.0"/>
-  <portes xsi:type="LDPparallel:Fourche" succ="//@sequences.1 //@sequences.2"/>
+  <portes xsi:type="LDPparallel:Fourche" pred="//@debut" succ="//@sequences.1 //@sequences.2"/>
   <debut reference="//@portes.1"/>
   <fin reference="//@sequences.0"/>
 </LDPparallel:Processus>
