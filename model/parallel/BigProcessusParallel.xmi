@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ASCII"?>
+<LDPparallel:Processus xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:LDPparallel="http://www.univ-pau.fr/m2ti/2020/LDP-parallel">
+  <sequences name="A13" premiereActivite="//@sequences.0/@activites.0">
+    <activites description="A13">
+      <action methodName="multiplication" returnTag="X">
+        <paramsTag>U</paramsTag>
+        <paramsTag>K</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <sequences name="A12" premiereActivite="//@sequences.1/@activites.0">
+    <activites description="A12">
+      <action methodName="multiplication" returnTag="U">
+        <paramsTag>O</paramsTag>
+        <paramsTag>T</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <sequences name="A11A10A9A6A2" premiereActivite="//@sequences.4/@activites.3">
+    <activites description="A11" precedente="//@sequences.2/@activites.1">
+      <action methodName="sqrt" returnTag="O">
+        <paramsTag>N</paramsTag>
+      </action>
+    </activites>
+    <activites description="A10" suivante="//@sequences.2/@activites.0" precedente="//@sequences.2/@activites.2">
+      <action methodName="sqrt" returnTag="N">
+        <paramsTag>M</paramsTag>
+      </action>
+    </activites>
+    <activites description="A9" suivante="//@sequences.2/@activites.1" precedente="//@sequences.2/@activites.3">
+      <action methodName="substraction" returnTag="M">
+        <paramsTag>F</paramsTag>
+        <paramsTag>L</paramsTag>
+      </action>
+    </activites>
+    <activites description="A6" suivante="//@sequences.2/@activites.2">
+      <action methodName="substraction" returnTag="F">
+        <paramsTag>E</paramsTag>
+        <paramsTag>B</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <sequences name="A8A7" premiereActivite="//@sequences.3/@activites.1">
+    <activites description="A8" precedente="//@sequences.3/@activites.1">
+      <action methodName="multiplication" returnTag="T">
+        <paramsTag>R</paramsTag>
+        <paramsTag>S</paramsTag>
+      </action>
+    </activites>
+    <activites description="A7" suivante="//@sequences.3/@activites.0">
+      <action methodName="addition" returnTag="R">
+        <paramsTag>P</paramsTag>
+        <paramsTag>Q</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <sequences name="A5A4A3A2A1" premiereActivite="//@sequences.4/@activites.4">
+    <activites description="A5" precedente="//@sequences.4/@activites.1">
+      <action methodName="division" returnTag="K">
+        <paramsTag>I</paramsTag>
+        <paramsTag>J</paramsTag>
+      </action>
+    </activites>
+    <activites description="A4" suivante="//@sequences.4/@activites.0" precedente="//@sequences.4/@activites.2">
+      <action methodName="addition" returnTag="I">
+        <paramsTag>G</paramsTag>
+        <paramsTag>H</paramsTag>
+      </action>
+    </activites>
+    <activites description="A3" suivante="//@sequences.4/@activites.1" precedente="//@sequences.4/@activites.3">
+      <action methodName="sqrt" returnTag="G">
+        <paramsTag>E</paramsTag>
+      </action>
+    </activites>
+    <activites description="A2" suivante="//@sequences.4/@activites.2" precedente="//@sequences.4/@activites.4">
+      <action methodName="addition" returnTag="E">
+        <paramsTag>C</paramsTag>
+        <paramsTag>D</paramsTag>
+      </action>
+    </activites>
+    <activites description="A1" suivante="//@sequences.4/@activites.3">
+      <action methodName="addition" returnTag="C">
+        <paramsTag>A</paramsTag>
+        <paramsTag>B</paramsTag>
+      </action>
+    </activites>
+  </sequences>
+  <portes xsi:type="LDPparallel:Jonction" pred="//@sequences.1 //@sequences.4" succ="//@sequences.0"/>
+  <portes xsi:type="LDPparallel:Jonction" pred="//@sequences.2 //@sequences.3" succ="//@sequences.1"/>
+  <portes xsi:type="LDPparallel:Fourche" pred="//@debut" succ="//@sequences.1 //@sequences.4 //@sequences.2 //@sequences.3"/>
+  <debut reference="//@portes.2"/>
+  <fin reference="//@sequences.0"/>
+</LDPparallel:Processus>
