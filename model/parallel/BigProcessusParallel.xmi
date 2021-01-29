@@ -87,7 +87,7 @@
   </sequences>
   <portes xsi:type="LDPparallel:Jonction" pred="//@sequences.1 //@sequences.4" succ="//@sequences.0"/>
   <portes xsi:type="LDPparallel:Jonction" pred="//@sequences.2 //@sequences.3" succ="//@sequences.1"/>
-  <portes xsi:type="LDPparallel:Fourche" pred="//@debut" succ="//@sequences.1 //@sequences.4 //@sequences.2 //@sequences.3"/>
+  <portes xsi:type="LDPparallel:Fourche" pred="//@debut" succ="//@sequences.4 //@sequences.2 //@sequences.3"/>
   <debut reference="//@portes.2"/>
   <fin reference="//@sequences.0"/>
 </LDPparallel:Processus>
