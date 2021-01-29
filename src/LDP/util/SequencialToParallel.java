@@ -48,147 +48,75 @@ public class SequencialToParallel {
 				}
 			}
 			
-			/* switch se basant sur le nombre d'operation qui doit etre necessairement executee au prealable:
-			 * 0 : l'operation peut etre effectuee des le depart (activite de depart) soit avant une autre activite donc concatenation dans la meme sequence soit en predecesseur d'une jonction (parallelisation)
-			 * 1 : l'operation necessite le resultat d'une autre operation, soit avant une autre activite -> concatenation dans la meme sequence soit en predecesseur d'une jonction (liee à une operation qui necessite plusieurs resultats) => parallelisation
-			 */
-			switch (cptBesoinResultat) {
-				case 0:
-					boolean find0 = false;
-					for (int nb_seq = 0; nb_seq < modelP.getSequences().size(); nb_seq++) { // parcours de toutes les sequences
-						for (int nb_act = 0; nb_act < modelP.getSequences().get(nb_seq).getActivites().size(); nb_act++) { // parcours de toutes les activites
-							LDPparallel.Activite rechercheAct = modelP.getSequences().get(nb_seq).getActivites().get(nb_act); // activite courante
-							for (int nb_paramTag = 0; nb_paramTag < rechercheAct.getAction().getParamsTag().size(); nb_paramTag++) { // parcours des paramsTag de l'activite
-								if (act.getAction().getReturnTag().equals(rechercheAct.getAction().getParamsTag().get(nb_paramTag))) { // test : returnTag = paramTag
-									derniereAct0 = false;
-									find0 = true;
-									int cptParamTagResultatOperationAnterieur = nombreParamTagBesoinResultat(modelP, rechercheAct); // nombre de resultat que necessite l'activite à laquelle elle est liee
-									if (cptParamTagResultatOperationAnterieur == 1) { // est lie a une activite qui requiert son resultat => dans la meme sequence
-										LDPparallel.Sequence seq = (LDPparallel.Sequence) modelP.getSequences().stream().filter(sequence -> sequence.getActivites().contains(rechercheAct)).toArray()[0]; // recuperation de la sequence de l'activite trouvee
-										seq.getActivites().get(nb_act).setPrecedente(act); // set le predecesseur de notre activite suivante
-										seq.getActivites().add(act);
-										seq.getActivites().get(nb_act+1).setSuivante(seq.getActivites().get(nb_act)); // set le successeur de notre activite
-										seq.setPremiereActivite(act);
-										if (seq.getName() != null)
-											seq.setName(seq.getName() + act.getDescription());
-										else
-											seq.setName(act.getDescription());
-									} else { // est lie à une activite qui necessite plusieurs resultat (jonction)
-										modelP.getSequences().add(LDPparallel.LDPparallelFactory.eINSTANCE.createSequence()); // creation d'une nouvelle sequence
-										modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act); // ajout de l'activite dans la sequence creee
-										modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act); // l'activite se met comme la premiere
-										if (modelP.getSequences().get(modelP.getSequences().size()-1).getName() != null)
-											modelP.getSequences().get(modelP.getSequences().size()-1).setName(modelP.getSequences().get(modelP.getSequences().size()-1).getName() + act.getDescription());
-										else
-											modelP.getSequences().get(modelP.getSequences().size()-1).setName(act.getDescription());
-										act.setPrecedente(null);
-										act.setSuivante(null);
-										
-										ArrayList<LDPparallel.Jonction> listJonction = new ArrayList<LDPparallel.Jonction>();
-										for (LDPparallel.Porte porte : modelP.getPortes()) { // parcours de toutes les portes pour determiner le nombre de jonction
-											if (porte instanceof LDPparallel.Jonction) {
-												listJonction.add((LDPparallel.Jonction)porte);
-											}
-										}
-										LDPparallel.Sequence seq = (LDPparallel.Sequence) modelP.getSequences().stream().filter(sequence -> sequence.getActivites().contains(rechercheAct)).toArray()[0];
-										for (LDPparallel.Jonction j : listJonction) {
-											LDPparallel.Sequence s = (LDPparallel.Sequence) j.getSucc();
-											if (s.getName().equals(seq.getName())) {
-												j.getPred().add(modelP.getSequences().get(modelP.getSequences().size()-1));
-											}
-										}
-									}			
-								}	
-							}
-						}
-					} 
-					if (!find0 && derniereAct0 != true) { // cas d'une activité dont le résultat ne sert pas
-						modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
-						modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
-						find0 = false;
-					}
-					if (derniereAct0) { // cas si la derniere activite nécessite 0 résultat
-						modelP.getSequences().add(LDPparallel.LDPparallelFactory.eINSTANCE.createSequence());
-						modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
-						if (modelP.getSequences().get(modelP.getSequences().size()-1).getName() != null)
-							modelP.getSequences().get(modelP.getSequences().size()-1).setName(modelP.getSequences().get(modelP.getSequences().size()-1).getName() + act.getDescription());
-						else
-							modelP.getSequences().get(modelP.getSequences().size()-1).setName(act.getDescription());
-						modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
-						act.setPrecedente(null);
-						act.setSuivante(null);
-						derniereAct0 = false;
-					}
-					break;
-				case 1: // meme cas que dans le case precedent avec quelques subtilites
-					boolean find1 = false;
-					for (int nb_seq = 0; nb_seq < modelP.getSequences().size(); nb_seq++) {
-						for (int nb_act = 0; nb_act < modelP.getSequences().get(nb_seq).getActivites().size(); nb_act++) {
-							LDPparallel.Activite rechercheAct = modelP.getSequences().get(nb_seq).getActivites().get(nb_act);
-							for (int nb_paramTag = 0; nb_paramTag < rechercheAct.getAction().getParamsTag().size(); nb_paramTag++) {
-								if (act.getAction().getReturnTag().equals(rechercheAct.getAction().getParamsTag().get(nb_paramTag))) {
-									derniereAct1 = false;
-									find1 = true;
-									int cptParamTagResultatOperationAnterieur = nombreParamTagBesoinResultat(modelP, rechercheAct);
-									if (cptParamTagResultatOperationAnterieur >= 2) {
-										modelP.getSequences().add(LDPparallel.LDPparallelFactory.eINSTANCE.createSequence());
-										modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
-										if (modelP.getSequences().get(modelP.getSequences().size()-1).getName() != null)
-											modelP.getSequences().get(modelP.getSequences().size()-1).setName(modelP.getSequences().get(modelP.getSequences().size()-1).getName() + act.getDescription());
-										else
-											modelP.getSequences().get(modelP.getSequences().size()-1).setName(act.getDescription());
-										act.setPrecedente(null);
-										act.setSuivante(null);
-										modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
-										
-										// recherche de la jonction à laquelle se mettre prédécesseur
-										ArrayList<LDPparallel.Jonction> listJonction = new ArrayList<LDPparallel.Jonction>();
-										for (LDPparallel.Porte porte : modelP.getPortes()) {
-											if (porte instanceof LDPparallel.Jonction) {
-												listJonction.add((LDPparallel.Jonction)porte);
-											}
-										}
-										LDPparallel.Sequence seq = (LDPparallel.Sequence) modelP.getSequences().stream().filter(sequence -> sequence.getActivites().contains(rechercheAct)).toArray()[0];
-										for (LDPparallel.Jonction j : listJonction) {
-											LDPparallel.Sequence s = (LDPparallel.Sequence) j.getSucc();
-											if (s.getName().equals(seq.getName())) { // test pour trouver la bonne séquence
-												j.getPred().add(modelP.getSequences().get(modelP.getSequences().size()-1));
-											}
-										}
-									} else if (cptParamTagResultatOperationAnterieur == 1) {
-										LDPparallel.Sequence seq1 = (LDPparallel.Sequence) modelP.getSequences().stream().filter(sequence -> sequence.getActivites().contains(rechercheAct)).toArray()[0];
-										seq1.getActivites().get(nb_act).setPrecedente(act);
-										seq1.getActivites().add(act);
-										seq1.getActivites().get(nb_act+1).setSuivante(seq1.getActivites().get(nb_act));
-										if (seq1.getName() != null)
-											seq1.setName(seq1.getName() + act.getDescription());
-										else
-											seq1.setName(act.getDescription());
-										seq1.setPremiereActivite(act);
-									}			
-								}
-							}
-						}
-					}
-					if (!find1 && derniereAct1 != true) { // cas d'une activité dont le résultat ne sert pas
-						modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
-						modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
-						find1 = false;
-					}
-					if (derniereAct1) { // cas si la derniere activite nécessite 1 résultat
-								modelP.getSequences().add(LDPparallel.LDPparallelFactory.eINSTANCE.createSequence());
-								modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
-								if (modelP.getSequences().get(modelP.getSequences().size()-1).getName() != null)
-									modelP.getSequences().get(modelP.getSequences().size()-1).setName(modelP.getSequences().get(modelP.getSequences().size()-1).getName() + act.getDescription());
-								else
-									modelP.getSequences().get(modelP.getSequences().size()-1).setName(act.getDescription());
-								modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
-								act.setPrecedente(null);
-								act.setSuivante(null);
+			if (cptBesoinResultat < 2) {
+				boolean find1 = false;
+				for (int nb_seq = 0; nb_seq < modelP.getSequences().size(); nb_seq++) {
+					for (int nb_act = 0; nb_act < modelP.getSequences().get(nb_seq).getActivites().size(); nb_act++) {
+						LDPparallel.Activite rechercheAct = modelP.getSequences().get(nb_seq).getActivites().get(nb_act);
+						for (int nb_paramTag = 0; nb_paramTag < rechercheAct.getAction().getParamsTag().size(); nb_paramTag++) {
+							if (act.getAction().getReturnTag().equals(rechercheAct.getAction().getParamsTag().get(nb_paramTag))) {
 								derniereAct1 = false;
+								find1 = true;
+								int cptParamTagResultatOperationAnterieur = nombreParamTagBesoinResultat(modelP, rechercheAct);
+								if (cptParamTagResultatOperationAnterieur >= 2) {
+									modelP.getSequences().add(LDPparallel.LDPparallelFactory.eINSTANCE.createSequence());
+									modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
+									if (modelP.getSequences().get(modelP.getSequences().size()-1).getName() != null)
+										modelP.getSequences().get(modelP.getSequences().size()-1).setName(modelP.getSequences().get(modelP.getSequences().size()-1).getName() + act.getDescription());
+									else
+										modelP.getSequences().get(modelP.getSequences().size()-1).setName(act.getDescription());
+									act.setPrecedente(null);
+									act.setSuivante(null);
+									modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
+									
+									// recherche de la jonction à laquelle se mettre prédécesseur
+									ArrayList<LDPparallel.Jonction> listJonction = new ArrayList<LDPparallel.Jonction>();
+									for (LDPparallel.Porte porte : modelP.getPortes()) {
+										if (porte instanceof LDPparallel.Jonction) {
+											listJonction.add((LDPparallel.Jonction)porte);
+										}
+									}
+									LDPparallel.Sequence seq = (LDPparallel.Sequence) modelP.getSequences().stream().filter(sequence -> sequence.getActivites().contains(rechercheAct)).toArray()[0];
+									for (LDPparallel.Jonction j : listJonction) {
+										LDPparallel.Sequence s = (LDPparallel.Sequence) j.getSucc();
+										if (s.getName().equals(seq.getName())) { // test pour trouver la bonne séquence
+											j.getPred().add(modelP.getSequences().get(modelP.getSequences().size()-1));
+										}
+									}
+								} else if (cptParamTagResultatOperationAnterieur == 1) {
+									LDPparallel.Sequence seq1 = (LDPparallel.Sequence) modelP.getSequences().stream().filter(sequence -> sequence.getActivites().contains(rechercheAct)).toArray()[0];
+									seq1.getActivites().get(nb_act).setPrecedente(act);
+									seq1.getActivites().add(act);
+									seq1.getActivites().get(nb_act+1).setSuivante(seq1.getActivites().get(nb_act));
+									if (seq1.getName() != null)
+										seq1.setName(seq1.getName() + act.getDescription());
+									else
+										seq1.setName(act.getDescription());
+									seq1.setPremiereActivite(act);
+								}			
+							}
+						}
 					}
-					break;
+				}
+				if (!find1 && derniereAct1 != true) { // cas d'une activité dont le résultat ne sert pas
+					modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
+					modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
+					find1 = false;
+				}
+				if (derniereAct1) { // cas si la derniere activite nécessite 1 résultat
+							modelP.getSequences().add(LDPparallel.LDPparallelFactory.eINSTANCE.createSequence());
+							modelP.getSequences().get(modelP.getSequences().size()-1).getActivites().add(act);
+							if (modelP.getSequences().get(modelP.getSequences().size()-1).getName() != null)
+								modelP.getSequences().get(modelP.getSequences().size()-1).setName(modelP.getSequences().get(modelP.getSequences().size()-1).getName() + act.getDescription());
+							else
+								modelP.getSequences().get(modelP.getSequences().size()-1).setName(act.getDescription());
+							modelP.getSequences().get(modelP.getSequences().size()-1).setPremiereActivite(act);
+							act.setPrecedente(null);
+							act.setSuivante(null);
+							derniereAct1 = false;
+				}
 			}
+			
 			// 2 : l'operation necessite 2 resultats ou plus donc installation d'une parallelisation => se met en successeur d'une jonction
 			if (cptBesoinResultat >= 2) {
 				boolean find2 = false;
