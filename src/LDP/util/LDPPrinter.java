@@ -1,7 +1,5 @@
 package LDP.util;
 
-import java.util.List;
-
 import org.eclipse.emf.common.util.EList;
 
 public class LDPPrinter {
@@ -26,7 +24,7 @@ public class LDPPrinter {
 	
 	public static void printProcessus(LDP.Processus processus) {
 		LDP.Activite currentActivity = processus.getDebut().getReference(); // get first Activity
-		while(currentActivity != null) { // while last activity have not been executed
+		while(currentActivity != null) { // while last activity have not been treated
 			printActivity(currentActivity);
 			currentActivity = currentActivity.getSuivante();
 		}
@@ -48,9 +46,10 @@ public class LDPPrinter {
 	}
 	
 	public static void printModel(LDP.Processus processus) {
+		System.out.println("----------- Affichage du modèle -----------\n");
 		printDebut(processus);
 		printFin(processus);
-		printCurrentActiviy(processus);
 		printProcessus(processus);
+		System.out.println("----------- -----------\n");
 	}
 }

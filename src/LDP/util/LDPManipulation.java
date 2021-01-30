@@ -1,6 +1,7 @@
 package LDP.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -9,10 +10,11 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.XMLResource.XMLMap;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 
-import LDPparallel.util.Calcul;
+import common.Calcul;
 
 public class LDPManipulation {
 	public void sauverModele(String uri, EObject root) {
@@ -37,7 +39,7 @@ public class LDPManipulation {
 			resource = (new ResourceSetImpl()).createResource(uriUri);
 			XMLResource.XMLMap xmlMap = new XMLMapImpl();
 			xmlMap.setNoNamespacePackage(pack);
-			java.util.Map options = new java.util.HashMap();
+			Map<String, XMLMap> options = new HashMap<>();
 			options.put(XMLResource.OPTION_XML_MAP, xmlMap);
 			resource.load(options);
 		}
@@ -59,7 +61,7 @@ public class LDPManipulation {
 
 		LDP.Processus base = null;
 		while(it.hasNext()) {
-			EObject obj = (EObject) it.next();
+			EObject obj = it.next();
 			if (obj instanceof LDP.Processus) {
 				base = (LDP.Processus) obj;
 				break;
@@ -81,6 +83,5 @@ public class LDPManipulation {
 		LDPExecutionEngine engine = new LDPExecutionEngine();
 
 		engine.execute("model/sequential/BigProcessus.xmi", target, tags);
-		System.out.println("Le résultat du calcul est : "+tags);
 	}
 }

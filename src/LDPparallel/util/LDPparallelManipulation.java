@@ -31,6 +31,8 @@ public class LDPparallelManipulation {
 	}
 	
 	public static void main(String argv[]) {
+		
+		LDPparallelPrinter.printModel(getProcessus("model/parallel/BigProcessusParallel_handmade.xmi"));
 	
 		HashMap<String, Integer> tags = new HashMap<>();
 		tags.put("A",1);tags.put("B",1);tags.put("D",1);tags.put("H",1);tags.put("J",1);
