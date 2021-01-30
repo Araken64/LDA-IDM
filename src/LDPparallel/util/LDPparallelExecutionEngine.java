@@ -70,7 +70,6 @@ public class LDPparallelExecutionEngine {
 			runPorte((Porte) element);
 		} else // last case : ElementProcessus is a PseudoEtat
 			runPseudoEtat((PseudoEtat) element);
-
 	}
 
 	/**

@@ -16,8 +16,7 @@ public class LDPExecutionEngine {
 	 * @throws LDPEngineException
 	 */
 	public void execute(String fileName, Object target, HashMap tags) throws LDPEngineException {
-		LDPManipulation ldp = new LDPManipulation();
-		LDP.Processus processus = ldp.getProcessus(fileName);
+		LDP.Processus processus = LDPManipulation.getProcessus(fileName);
 		if (processus == null) throw new LDPEngineException("Processus was not found in model");
 		LDP.Activite currentActivity = processus.getDebut().getReference();
 
