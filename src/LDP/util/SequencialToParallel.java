@@ -2,6 +2,8 @@ package LDP.util;
 
 import java.util.ArrayList;
 
+import common.ModelHelper;
+
 public class SequencialToParallel {
 	
 	/**
@@ -286,13 +288,12 @@ public class SequencialToParallel {
 	}
 	
 	public static void main(String argv[]) {
-		LDPManipulation ldpm = new LDPManipulation();
 		System.out.println(" Chargement du modele");
-		LDP.Processus modelS = ldpm.getProcessus("model/sequential/MyCalcul.xmi");
+		LDP.Processus modelS = LDPManipulation.getProcessus("model/sequential/MyCalcul.xmi");
 		LDPparallel.Processus modelP = LDPparallel.LDPparallelFactory.eINSTANCE.createProcessus();
 		copieModelStoModelP(modelS, modelP);
 		transformation(modelP);
-		ldpm.sauverModele("model/parallel/MyCalculParallel.xmi", modelP);
+		ModelHelper.sauverModele("model/parallel/MyCalculParallel.xmi", modelP);
 		System.out.println("Fin transformation");
 	}
 }
